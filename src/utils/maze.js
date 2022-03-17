@@ -8,7 +8,8 @@ const WALL = '⬜️';
 
 
 function setWalls (maze, start, target) {
-  let wallCount = (maze.length*maze.length)/2;
+  let wallCount = (maze.length*maze.length)/3;
+  // let wallCount = 0;
   while (wallCount > 0) {
     const coords = [getRandomInt(maze.length), getRandomInt(maze.length)];
     if ((coords[0] === start[0] && coords[1] === start[1]) || (coords[0] === target[0] && coords[1] === target[1] )) {
@@ -21,20 +22,9 @@ function setWalls (maze, start, target) {
 }
 
 function drawFinish (position, storage, maze, startingPosition) {
-  // if (
-  //   position[0] === startingPosition[0] &&
-  //   position[1] === startingPosition[1]
-  // ) {
-  //   maze[startingPosition[0]][startingPosition[1]] = SHORTESTPATH;
-
-  //   // console.table(maze);
-  //   return;
-  // }
-  // console.log(position);
-  const minDistance = storage[position.toString()].distance;
-  // console.log(minDistance);
+  
+  const minDistance = storage[position].distance;
   maze[position[0]][position[1]] = SHORTESTPATH;
-  // console.table(maze);
   let closest = findNeighborClosestToStart(
     position,
     minDistance - 1,
@@ -42,7 +32,6 @@ function drawFinish (position, storage, maze, startingPosition) {
     maze.length
   );
   return [closest[0],maze];
-  // drawFinish(closest[0], storage, maze, startingPosition);
 }
 
 function findNeighborClosestToStart (current, targetDistance, storage, size) {
@@ -77,10 +66,9 @@ function findNeighborClosestToStart (current, targetDistance, storage, size) {
   }
 }
 
-function explore (maze, storage, targetPosition, queue) {
+function explore (maze, storage, startingPosition, targetPosition, queue) {
   
-  // console.log(queue.length);
-  // console.table(queue);
+  
   let current = queue[0];
   if (
     current[0] === targetPosition[0] &&
@@ -91,7 +79,6 @@ function explore (maze, storage, targetPosition, queue) {
   }
 
   const unvisitedNeighbors = findUnvisitedNeighbors(maze.length,storage,  ...current);
-  
 
   for (let neighbor of unvisitedNeighbors) {
    
@@ -99,11 +86,18 @@ function explore (maze, storage, targetPosition, queue) {
       storage[neighbor[0]].distance,
       storage[current].distance + 1
     );
+    
     maze[neighbor[0][0]][neighbor[0][1]] = TOUCHEDFIELD;
   }
 
   // mark current as visited
-  maze[current[0]][current[1]] = VISITEDFIELD;
+  if (!(
+    current[0] === startingPosition[0] &&
+    current[1] === startingPosition[1])
+  ) {
+    console.log('not starting pos')
+    maze[current[0]][current[1]] = VISITEDFIELD;
+  }
   storage[current].visited = true;
   queue.shift();
   // console.table(unvisitedNeighbors);

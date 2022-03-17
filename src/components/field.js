@@ -5,13 +5,13 @@ const Field = ({ matrix }) => {
   // let [rows, setRows] = useState([]);
   let tempRows = [];
   // console.table(matrix)
-  for (let i = 0; i < matrix.length; i++) {
+  for (let i = 0; i < matrix?.length; i++) {
     let row = [];
-    for (let j = 0; j < matrix.length; j++) {
+    for (let j = 0; j < matrix?.length; j++) {
       row.push(
         <div
           key={[i, j]}
-          className={`h-5 w-5  ${
+          className={`h-2 w-2 md:w-3 md:h-3 lg:w-5 lg:h-5 ${
             matrix[i][j] === WALL
               ? 'bg-black'
               : matrix[i][j] === SHORTESTPATH
