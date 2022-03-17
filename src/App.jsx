@@ -5,37 +5,34 @@ import Field from './components/field';
 import Wrapper from './components/Wrapper';
 import NavBar from './components/NavBar';
 
-let initialMaze;
-let startingPosition;
-let targetPosition;
-let storage;
-let queue = [];
 
 function App() {
   let [maze, setMaze] = useState();
   let runner = useRef();
-  // useEffect(() => {
-  //   console.log('Runner changed', runner);
-  // }, [runner]);
+  let queue = useRef([]);
+  let initialMaze = useRef();
+  let startingPosition = useRef();
+  let targetPosition = useRef();
+  let storage = useRef();
 
   const start = () => {
-    initialMaze = setupBoard(40);
-    [startingPosition, targetPosition] = placeRandomStartAndTarget(initialMaze);
-    setWalls(initialMaze, startingPosition, targetPosition);
+    initialMaze.current = setupBoard(40);
+    [startingPosition.current, targetPosition.current] = placeRandomStartAndTarget(initialMaze.current);
+    setWalls(initialMaze.current, startingPosition.current, targetPosition.current);
 
-    storage = {};
-    for (let i = 0; i < initialMaze.length; i++) {
-      for (let j = 0; j < initialMaze.length; j++) {
+    storage.current = {};
+    for (let i = 0; i < initialMaze.current.length; i++) {
+      for (let j = 0; j < initialMaze.current.length; j++) {
         const key = [i, j]; // [row, column]
-        storage[key] =
-          initialMaze[i][j] === STARTMARKER
+        storage.current[key] =
+          initialMaze.current[i][j] === STARTMARKER
             ? { distance: 0, visited: false, wall: false }
-            : { distance: Infinity, visited: false, wall: initialMaze[i][j] === WALL };
+            : { distance: Infinity, visited: false, wall: initialMaze.current[i][j] === WALL };
       }
     }
-    queue = [];
-    queue.push(startingPosition);
-    setMaze(initialMaze);
+    queue.current = [];
+    queue.current.push(startingPosition.current);
+    setMaze(initialMaze.current);
   };
 
   useEffect(() => {
@@ -43,12 +40,10 @@ function App() {
   }, []);
 
   const runFinish = () => {
-    // console.log('Done');
-    // clear();
-    let current = targetPosition;
+    let current = targetPosition.current;
     let finalMaze;
-    while (!(current[0] === startingPosition[0] && current[1] === startingPosition[1])) {
-      let [newClosest, newMaze] = drawFinish(current, storage, maze, startingPosition);
+    while (!(current[0] === startingPosition.current[0] && current[1] === startingPosition.current[1])) {
+      let [newClosest, newMaze] = drawFinish(current, storage.current, maze, startingPosition.current);
       current = newClosest;
       finalMaze = newMaze;
     }
@@ -57,7 +52,7 @@ function App() {
 
   const nextStep = () => {
     try {
-      let newMaze = explore(maze, storage,startingPosition, targetPosition, queue);
+      let newMaze = explore(maze, storage.current, startingPosition.current, targetPosition.current, queue.current);
       if (newMaze === 'Finished') {
         runFinish();
         clear();
@@ -65,8 +60,6 @@ function App() {
       }
       setMaze(newMaze);
     } catch {
-      console.error('Error');
-    
       clear();
     }
   };
@@ -75,7 +68,7 @@ function App() {
     console.log('Setting up interval');
     if (!runner.current) {
       console.log('No runner found, setting new.');
-      runner.current = setInterval(nextStep, 15);
+      runner.current = setInterval(nextStep, 10);
     }
   };
 
@@ -89,7 +82,10 @@ function App() {
   };
 
   const restart = () => {
-   start();
+    if (runner.current) {
+      return;
+    }
+    start();
   };
 
   return (
@@ -106,7 +102,7 @@ function App() {
         }}
       ></NavBar>
 
-      <Field matrix={maze} storage={storage}></Field>
+      <Field matrix={maze} storage={storage.current}></Field>
     </Wrapper>
   );
 }

@@ -11,11 +11,11 @@ const Field = ({ matrix }) => {
       row.push(
         <div
           key={[i, j]}
-          className={`h-2 w-2 md:w-3 md:h-3 lg:w-5 lg:h-5 ${
+          className={`h-2 w-2 md:w-3 md:h-3 lg:w-5 lg:h-5 transition-all duration-200 ${
             matrix[i][j] === WALL
               ? 'bg-black'
               : matrix[i][j] === SHORTESTPATH
-              ? 'bg-orange-500'
+              ? 'bg-green-500'
               : matrix[i][j] === STARTMARKER
               ? 'bg-green-500'
               : matrix[i][j] === TARGETMARKER

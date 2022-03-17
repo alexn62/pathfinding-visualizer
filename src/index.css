@@ -4,3 +4,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.headerStyle{
+  /* text-shadow: '-1px, 0 green, 0 1px green, 1px 0 green, 0 -1px green'; */
+  color: green,
+ }
