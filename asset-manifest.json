@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/dijkstra-visualizer/static/css/main.52f8c449.css",
-    "main.js": "/dijkstra-visualizer/static/js/main.e2cdebaa.js",
+    "main.css": "/dijkstra-visualizer/static/css/main.3364abef.css",
+    "main.js": "/dijkstra-visualizer/static/js/main.38e4ce11.js",
     "static/js/787.2036a371.chunk.js": "/dijkstra-visualizer/static/js/787.2036a371.chunk.js",
     "index.html": "/dijkstra-visualizer/index.html",
-    "main.52f8c449.css.map": "/dijkstra-visualizer/static/css/main.52f8c449.css.map",
-    "main.e2cdebaa.js.map": "/dijkstra-visualizer/static/js/main.e2cdebaa.js.map",
+    "main.3364abef.css.map": "/dijkstra-visualizer/static/css/main.3364abef.css.map",
+    "main.38e4ce11.js.map": "/dijkstra-visualizer/static/js/main.38e4ce11.js.map",
     "787.2036a371.chunk.js.map": "/dijkstra-visualizer/static/js/787.2036a371.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.52f8c449.css",
-    "static/js/main.e2cdebaa.js"
+    "static/css/main.3364abef.css",
+    "static/js/main.38e4ce11.js"
   ]
 }
