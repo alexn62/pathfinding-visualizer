@@ -1,37 +1,31 @@
 import './App.css';
 import { useEffect, useRef, useState } from 'react';
-import { placeRandomStartAndTarget, explore, setupBoard, setWalls, STARTMARKER, WALL, drawFinish } from './utils/maze';
+import { placeRandomStartAndTarget, setupBoard, setWalls, drawFinish } from './utils/maze';
+import explore from './utils/dijkstra';
+import { astarNextStep } from './utils/astar';
 import Field from './components/field';
 import Wrapper from './components/Wrapper';
 import NavBar from './components/NavBar';
 
-
 function App() {
   let [maze, setMaze] = useState();
+  let [selectDijkstra, setSelecDijkstra] = useState(true);
   let runner = useRef();
   let queue = useRef([]);
   let initialMaze = useRef();
-  let startingPosition = useRef();
-  let targetPosition = useRef();
-  let storage = useRef();
-
+  let starting = useRef();
+  let target = useRef();
+  let open = useRef([]);
+  let closed = useRef([]);
   const start = () => {
     initialMaze.current = setupBoard(40);
-    [startingPosition.current, targetPosition.current] = placeRandomStartAndTarget(initialMaze.current);
-    setWalls(initialMaze.current, startingPosition.current, targetPosition.current);
-
-    storage.current = {};
-    for (let i = 0; i < initialMaze.current.length; i++) {
-      for (let j = 0; j < initialMaze.current.length; j++) {
-        const key = [i, j]; // [row, column]
-        storage.current[key] =
-          initialMaze.current[i][j] === STARTMARKER
-            ? { distance: 0, visited: false, wall: false }
-            : { distance: Infinity, visited: false, wall: initialMaze.current[i][j] === WALL };
-      }
-    }
+    [starting.current, target.current] = placeRandomStartAndTarget(initialMaze.current);
+    setWalls(initialMaze.current, starting.current, target.current);
     queue.current = [];
-    queue.current.push(startingPosition.current);
+    open.current = [];
+    closed.current = [];
+    queue.current.push(starting.current);
+    open.current.push(starting.current);
     setMaze(initialMaze.current);
   };
 
@@ -40,10 +34,10 @@ function App() {
   }, []);
 
   const runFinish = () => {
-    let current = targetPosition.current;
+    let current = target.current;
     let finalMaze;
-    while (!(current[0] === startingPosition.current[0] && current[1] === startingPosition.current[1])) {
-      let [newClosest, newMaze] = drawFinish(current, storage.current, maze, startingPosition.current);
+    while (current !== starting.current) {
+      let [newClosest, newMaze] = drawFinish(current, maze);
       current = newClosest;
       finalMaze = newMaze;
     }
@@ -52,7 +46,10 @@ function App() {
 
   const nextStep = () => {
     try {
-      let newMaze = explore(maze, storage.current, startingPosition.current, targetPosition.current, queue.current);
+      let newMaze = selectDijkstra
+        ? explore(maze, starting.current, target.current, queue.current)
+        : astarNextStep(target.current, open.current, closed.current, maze);
+
       if (newMaze === 'Finished') {
         runFinish();
         clear();
@@ -65,9 +62,7 @@ function App() {
   };
 
   const setupInterval = () => {
-    console.log('Setting up interval');
     if (!runner.current) {
-      console.log('No runner found, setting new.');
       runner.current = setInterval(nextStep, 10);
     }
   };
@@ -88,9 +83,17 @@ function App() {
     start();
   };
 
+  const select = () => {
+    if (runner.current) {
+      return;
+    }
+    setSelecDijkstra(!selectDijkstra);
+  };
+
   return (
     <Wrapper>
       <NavBar
+        select={() => select()}
         pause={() => {
           clear();
         }}
@@ -100,9 +103,10 @@ function App() {
         restart={() => {
           restart();
         }}
+        selectDijkstra={selectDijkstra}
       ></NavBar>
 
-      <Field matrix={maze} storage={storage.current}></Field>
+      <Field matrix={maze}></Field>
     </Wrapper>
   );
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-import { SHORTESTPATH, STARTMARKER, TARGETMARKER, TOUCHEDFIELD, VISITEDFIELD, WALL } from '../utils/maze';
 
 const Field = ({ matrix }) => {
   // let [rows, setRows] = useState([]);
@@ -14,17 +13,17 @@ const Field = ({ matrix }) => {
           // className={`transition-all h-4 w-4
           className={`h-2 w-2 md:w-3 md:h-3 lg:w-4 lg:h-4 transition-all duration-200
            ${
-             matrix[i][j] === WALL
+             matrix[i][j].wall === true
                ? 'bg-black'
-               : matrix[i][j] === SHORTESTPATH
+               : matrix[i][j].shortestPath === true
                ? 'bg-green-500'
-               : matrix[i][j] === STARTMARKER
+               : matrix[i][j].start === true
                ? 'bg-green-500'
-               : matrix[i][j] === TARGETMARKER
+               : matrix[i][j].end === true
                ? 'bg-red-500'
-               : matrix[i][j] === VISITEDFIELD
+               : matrix[i][j].visited === true
                ? 'bg-purple-400'
-               : matrix[i][j] === TOUCHEDFIELD
+               : matrix[i][j].touched === true
                ? 'bg-pink-500'
                : 'bg-gray-400'
            }
