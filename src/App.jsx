@@ -2,7 +2,7 @@ import './App.css';
 import { useEffect, useRef, useState } from 'react';
 import { placeRandomStartAndTarget, setupBoard, setWalls, drawFinish } from './utils/maze';
 import explore from './utils/dijkstra';
-import { astarNextStep } from './utils/astar';
+import  astarNextStep  from './utils/astar';
 import Field from './components/field';
 import Wrapper from './components/Wrapper';
 import NavBar from './components/NavBar';

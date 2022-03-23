@@ -55,4 +55,4 @@ const astarNextStep = (end, open, closed, maze) => {
 
 // mostly adapted from https://briangrinstead.com/blog/astar-search-algorithm-in-javascript/
 
-export { astarNextStep };
+export default  astarNextStep ;

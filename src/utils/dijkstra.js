@@ -32,4 +32,4 @@ function explore(maze, start, target, queue) {
 }
 
 
-module.exports = explore;
+export default explore;
