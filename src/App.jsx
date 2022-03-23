@@ -18,7 +18,7 @@ function App() {
   let open = useRef([]);
   let closed = useRef([]);
   const start = () => {
-    initialMaze.current = setupBoard(40);
+    initialMaze.current = setupBoard(50);
     [starting.current, target.current] = placeRandomStartAndTarget(initialMaze.current);
     setWalls(initialMaze.current, starting.current, target.current);
     queue.current = [];

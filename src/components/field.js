@@ -11,7 +11,7 @@ const Field = ({ matrix }) => {
         <div
           key={[i, j]}
           // className={`transition-all h-4 w-4
-          className={`h-2 w-2 md:w-3 md:h-3 lg:w-4 lg:h-4 transition-all duration-200
+          className={`h-1.5 w-1.5 md:w-3 md:h-3 lg:w-3 lg:h-3 transition-all duration-200
            ${
              matrix[i][j].wall === true
                ? 'bg-black'
